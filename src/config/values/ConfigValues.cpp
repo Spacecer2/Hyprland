@@ -680,6 +680,8 @@ std::vector<SP<IValue>> Values::getConfigValues() {
         MS<Int>("render:cm_sdr_white", "SDR paper white in nits when mapping SDR onto an HDR output. -1 = use the monitor rule.", -1, {.min = -1, .max = 10000}),
         MS<Float>("render:cm_sdr_black", "SDR black level in nits for SDR onto HDR. -1 = use the monitor rule.", -1.F, {.min = -1.F, .max = 10.F}),
         MS<Float>("render:cm_sdr_saturation", "SDR saturation multiplier for SDR onto HDR. -1 = use the monitor rule.", -1.F, {.min = -1.F, .max = 3.F}),
+        MS<Int>("render:cm_peak_luminance", "Override the HDR peak (maxCLL) luminance of the output in nits. -1 = use the monitor rule / EDID.", -1, {.min = -1, .max = 10000}),
+        MS<Int>("render:cm_avg_luminance", "Override the HDR frame-average (maxFALL) luminance of the output in nits. -1 = use the monitor rule / EDID.", -1, {.min = -1, .max = 10000}),
         MS<Bool>("render:commit_timing_enabled", "Enable commit timing proto. Requires restart", true),
         MS<Bool>("render:icc_vcgt_enabled", "Enable sending VCGT ramps to KMS with ICC profiles", true),
         MS<Bool>("render:use_shader_blur_blend", "Use experimental blurred bg blending", false),

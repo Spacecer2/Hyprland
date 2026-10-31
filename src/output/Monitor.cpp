@@ -2329,10 +2329,16 @@ float CMonitor::minLuminance(float defaultValue) {
 }
 
 int CMonitor::maxLuminance(int defaultValue) {
+    static auto POVERRIDE = CConfigValue<Config::INTEGER>("render:cm_peak_luminance");
+    if (*POVERRIDE >= 0)
+        return *POVERRIDE;
     return m_maxLuminance >= 0 ? m_maxLuminance : (m_output->parsedEDID.hdrMetadata.has_value() ? m_output->parsedEDID.hdrMetadata->desiredContentMaxLuminance : defaultValue);
 }
 
 int CMonitor::maxAvgLuminance(int defaultValue) {
+    static auto POVERRIDE = CConfigValue<Config::INTEGER>("render:cm_avg_luminance");
+    if (*POVERRIDE >= 0)
+        return *POVERRIDE;
     return m_maxAvgLuminance >= 0 ? m_maxAvgLuminance :
                                     (m_output->parsedEDID.hdrMetadata.has_value() ? m_output->parsedEDID.hdrMetadata->desiredMaxFrameAverageLuminance : defaultValue);
 }

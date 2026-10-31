@@ -2266,6 +2266,20 @@ void IHyprRenderer::renderMonitor(PHLMONITOR pMonitor, bool commit) {
     m_renderingMonitor = true;
     const CScopeGuard                                     monitorRenderGuard([this] { m_renderingMonitor = false; });
 
+    // Peak / average luminance overrides rebuild the output's image description
+    // (and therefore the HDR metadata) without going through applyMonitorRule,
+    // so they take effect without a mode set and without flicker.
+    {
+        static auto PPEAK    = CConfigValue<Config::INTEGER>("render:cm_peak_luminance");
+        static auto PAVG     = CConfigValue<Config::INTEGER>("render:cm_avg_luminance");
+        static int  lastPeak = -2, lastAvg = -2;
+        if (*PPEAK != lastPeak || *PAVG != lastAvg) {
+            lastPeak = *PPEAK;
+            lastAvg  = *PAVG;
+            pMonitor->applyCMType(pMonitor->m_cmType, pMonitor->m_sdrEotf);
+        }
+    }
+
     static std::chrono::high_resolution_clock::time_point renderStart        = std::chrono::high_resolution_clock::now();
     static std::chrono::high_resolution_clock::time_point renderStartOverlay = std::chrono::high_resolution_clock::now();
     static std::chrono::high_resolution_clock::time_point endRenderOverlay   = std::chrono::high_resolution_clock::now();
